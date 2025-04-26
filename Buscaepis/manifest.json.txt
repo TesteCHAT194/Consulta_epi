@@ -1,0 +1,21 @@
+{
+  "name": "Consulta de EPIs",
+  "short_name": "EPIs",
+  "description": "Consulte os EPIs necessários para cada função.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#006400",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "https://example.com/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://example.com/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
