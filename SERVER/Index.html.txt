@@ -1,0 +1,155 @@
+ <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Consulta de EPIs</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #006400; /* verde escuro */
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.95); /* fundo branco levemente transparente */
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 500px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+    label {
+      margin-top: 15px;
+      display: block;
+      color: #555;
+      font-weight: bold;
+    }
+    select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #resultado {
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #e9f5ff;
+      border: 1px solid #b3e0ff;
+      animation: fadeIn 0.5s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Consulta de EPIs</h1>
+
+  <label for="setor">Setor:</label>
+  <select id="setor" onchange="atualizarFuncoes()">
+    <option value="">-- Selecione --</option>
+    <option value="producao">Produção</option>
+    <option value="manutencao">Manutenção</option>
+    <option value="logistica">Logística</option>
+    <option value="administrativo">Administrativo</option>
+  </select>
+
+  <label for="funcao">Função:</label>
+  <select id="funcao">
+    <option value="">-- Selecione o setor primeiro --</option>
+  </select>
+
+  <button onclick="mostrarEPIs()">Buscar EPIs</button>
+
+  <div id="resultado"></div>
+</div>
+
+<script>
+  // Dados de funções por setor
+  const funcoesPorSetor = {
+    producao: ["Operador de Máquina", "Supervisor de Produção"],
+    manutencao: ["Técnico de Manutenção", "Engenheiro de Manutenção"],
+    logistica: ["Motorista de Empilhadeira", "Conferente de Estoque"],
+    administrativo: ["Assistente Administrativo", "Analista de RH"]
+  };
+
+  // Dados de EPIs por função
+  const episPorFuncao = {
+    "Operador de Máquina": ["Capacete de Segurança", "Óculos de Proteção", "Luva Anticorte", "Protetor Auricular", "Botina de Segurança"],
+    "Supervisor de Produção": ["Capacete", "Óculos de Proteção", "Botina de Segurança"],
+    "Técnico de Manutenção": ["Capacete", "Luva Isolante", "Botina de Segurança", "Cinto de Segurança", "Óculos de Proteção"],
+    "Engenheiro de Manutenção": ["Capacete", "Óculos de Proteção", "Calçado de Segurança"],
+    "Motorista de Empilhadeira": ["Colete Refletivo", "Capacete", "Botina com Biqueira de Aço"],
+    "Conferente de Estoque": ["Colete Refletivo", "Luvas", "Botina"],
+    "Assistente Administrativo": ["Não é necessário EPI para essa função."],
+    "Analista de RH": ["Não é necessário EPI para essa função."]
+  };
+
+  function atualizarFuncoes() {
+    var setorSelecionado = document.getElementById('setor').value;
+    var funcaoSelect = document.getElementById('funcao');
+    
+    funcaoSelect.innerHTML = ""; // Limpa funções anteriores
+
+    if (setorSelecionado && funcoesPorSetor[setorSelecionado]) {
+      funcoesPorSetor[setorSelecionado].forEach(function(funcao) {
+        var option = document.createElement('option');
+        option.value = funcao;
+        option.text = funcao;
+        funcaoSelect.appendChild(option);
+      });
+    } else {
+      var option = document.createElement('option');
+      option.value = "";
+      option.text = "-- Selecione o setor primeiro --";
+      funcaoSelect.appendChild(option);
+    }
+  }
+
+  function mostrarEPIs() {
+    var funcao = document.getElementById('funcao').value;
+    var resultado = document.getElementById('resultado');
+
+    if (funcao && episPorFuncao[funcao]) {
+      resultado.innerHTML = "<h3>EPIs Necessários:</h3><ul>" +
+        episPorFuncao[funcao].map(function(epi) {
+          return "<li>" + epi + "</li>";
+        }).join("") +
+        "</ul>";
+    } else {
+      resultado.innerHTML = "<p style='color:red;'>Por favor, selecione uma função válida.</p>";
+    }
+  }
+</script>
+
+</body>
+</html>
